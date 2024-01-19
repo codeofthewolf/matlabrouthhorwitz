@@ -1,0 +1,33 @@
+% Ingresar el polinomio característico en forma de vector de coeficientes
+coefficients = input('Ingrese los coeficientes del polinomio característico: ');
+
+% Obtener el grado del polinomio
+n = length(coefficients) - 1;
+
+% Inicializar la matriz de Routh-Hurwitz con ceros
+rh_matrix = zeros(n+1, n+1);
+
+% Llenar la primera y segunda fila de la matriz
+rh_matrix(1, :) = coefficients(1:2:end);
+rh_matrix(2, :) = coefficients(2:2:end);
+
+% Calcular el resto de las filas de la matriz
+for i = 3:n+1
+    for j = 1:n
+        rh_matrix(i, j) = -det([rh_matrix(i-2:i-1, j:j+1); rh_matrix(1:2, j:j+1)]) / rh_matrix(i-1, 1);
+    end
+end
+
+% Verificar la estabilidad del sistema
+stable = all(rh_matrix(:, 1) > 0);
+
+% Mostrar la matriz de Routh-Hurwitz
+disp('Matriz de Routh-Hurwitz:');
+disp(rh_matrix);
+
+% Mostrar el resultado de estabilidad
+if stable
+    disp('El sistema es estable.');
+else
+    disp('El sistema es inestable.');
+end
